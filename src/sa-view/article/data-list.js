@@ -1,0 +1,58 @@
+// 模拟数据 
+module.exports = {
+	code: 200,
+	msg: 'ok',
+	data: [{
+			"id": 20,
+			"title": "那个清晨",
+			userName: "抚州小吴",
+			phone: 1520784822,
+			avatar: 'https://color-test.oss-cn-qingdao.aliyuncs.com/dyc/img/default_head/2.png?x-oss-process=style/yasuo',
+			hotelName: '南昌保利大酒店',
+			hotelType: '五星级',
+			"address": "江西南昌湾里区68路199号",
+			"see_count": 356,
+			"like_count": 55,
+			"share_count": 13,
+			"create_username": '总经理',
+			"is_public": 1,
+			email: '1161520645@qq.com',
+			"create_time": "2019-05-12"
+		},
+		{
+			"id": 17,
+			"title": "人生，就是一场抵达",
+			userName: "抚州小吴",
+			phone: 1520784822,
+			avatar: 'https://color-test.oss-cn-qingdao.aliyuncs.com/dyc/img/default_head/2.png?x-oss-process=style/yasuo',
+			hotelName: '南昌保利大酒店',
+			hotelType: '五星级',
+			"address": "江西南昌湾里区68路199号...",
+			"see_count": 200,
+			"like_count": 12,
+			"share_count": 6,
+			"create_username": '总经理',
+			"is_public": 1,
+			email: '1161520645@qq.com',
+			"create_time": "2019-05-12"
+		},
+		{
+			"id": 11,
+			"title": "气质女生与世界先生",
+			userName: "抚州小吴",
+			phone: 1520784822,
+			avatar: 'https://color-test.oss-cn-qingdao.aliyuncs.com/dyc/img/default_head/2.png?x-oss-process=style/yasuo',
+			hotelName: '南昌保利大酒店',
+			hotelType: '五星级',
+			"address": "江西南昌湾里区68路199号...",
+			"see_count": 240,
+			"like_count": 22,
+			"share_count": 15,
+			"create_username": '总经理',
+			"is_public": 2,
+			email: '1161520645@qq.com',
+			"create_time": "2019-05-10"
+		},
+	],
+	dataCount: 6379
+}
