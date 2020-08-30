@@ -31,7 +31,7 @@
 					layout="total, prev, pager, next, sizes, jumper" 
 					:current-page.sync="p.pageNo" 
 					:page-size.sync="p.pageSize" 
-					:total="dataCount" 
+					:total="p.dataCount"
 					:page-sizes="[1, 10, 20, 30, 40, 50, 100]" 
 					@current-change="f5(true)" 
 					@size-change="f5(true)">
@@ -68,8 +68,8 @@
 					end_time: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),	// 本月当日 
 					pageNo: 1,
 					pageSize: 10,
+				dataCount: 0,
 				},
-				dataCount: 1422,
 				dataList: [],
 				m: {	
 					username:'',	// 从菜单配置文件里传递过来的参数 
@@ -82,11 +82,12 @@
 			f5() {
 				this.$get('/system/selectPage', {
 					params: {
-						current: 1,
-					pageSize: 50	
+						current: this.p.pageNo,
+						pageSize: this.p.pageSize
 					}
 				}).then(res => {
 					this.dataList = res.data.data.list
+        this.p.dataCount = res.data.data.total;
 				})
 			},
 			// 删除

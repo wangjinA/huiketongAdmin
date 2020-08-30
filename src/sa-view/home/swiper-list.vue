@@ -75,18 +75,18 @@
       </el-table>
 
       <!-- 分页 -->
-      <!-- <div class="page-box">
+      <div class="page-box">
         <el-pagination
           background
           layout="total, prev, pager, next, sizes, jumper"
           :current-page.sync="p.pageNo"
           :page-size.sync="p.pageSize"
-          :total="dataCount"
+          :total="p.dataCount"
           :page-sizes="[1, 10, 20, 30, 40, 50, 100]"
           @current-change="f5()"
           @size-change="f5()"
         ></el-pagination>
-      </div> -->
+      </div>
     </div>
     <!-- 添加一个 -->
     <div class="c-panel c-panel-add">
@@ -137,8 +137,8 @@ export default {
         pageNo: 1,
         pageSize: 10,
         sort_type: 0,
+        dataCount: 0,
       },
-      dataCount: 0,
       bannerList: [], // 数据集合
       m: {
         // 添加信息
@@ -156,12 +156,12 @@ export default {
     };
   },
   methods: {
-		updateBanner(bannerItem) {
-			this.$post("/banner/inset", bannerItem).then(() => {
-				this.sa.alert("修改成功");
-				this.f5()
+    updateBanner(bannerItem) {
+      this.$post("/banner/inset", bannerItem).then(() => {
+        this.sa.alert("修改成功");
+        this.f5();
       });
-		} ,
+    },
     beforeUpload(file) {
       console.log(file);
       const formData = new FormData();
@@ -186,8 +186,8 @@ export default {
       }).then((res) => {
         console.log(res);
         this.sa.alert("添加成功");
-				this.m.img_src = "";
-				this.f5()
+        this.m.img_src = "";
+        this.f5();
       });
       // var m = this.sa.copyJSON(this.m);
       // this.sa.ajax2(
@@ -213,33 +213,32 @@ export default {
       });
     },
     // 删除
-    del (data) {
-			console.log(data);
-      this.sa.confirm(
-        "是否删除，此操作不可撤销",
-        ()=>{
-					this.$get('/banner/delete', {
-						params: {
-							id: data.bannerId
-						}
-					}).then(()=>{
-						this.sa.alert("删除成功");
-						this.f5()
-					}).catch(()=>{
-						this.sa.alert("删除失败");
-					})
-				}
-      );
+    del(data) {
+      console.log(data);
+      this.sa.confirm("是否删除，此操作不可撤销", () => {
+        this.$get("/banner/delete", {
+          params: {
+            id: data.bannerId,
+          },
+        })
+          .then(() => {
+            this.sa.alert("删除成功");
+            this.f5();
+          })
+          .catch(() => {
+            this.sa.alert("删除失败");
+          });
+      });
     },
     getBanner() {
       this.$get("/banner/selectBannerPage", {
         params: {
-          current: 1,
-          pageSize: 50,
+          current: this.p.pageNo,
+          pageSize: this.p.pageSize,
         },
       }).then((res) => {
-				this.bannerList = res.data.data.list;
-				console.log(this);
+        this.bannerList = res.data.data.list;
+        this.p.dataCount = res.data.data.total;
       });
     },
   },

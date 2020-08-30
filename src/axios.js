@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import Vue from 'vue'
 const server = Axios.create({
-  baseURL: '/api',
+  baseURL: process.env.NODE_ENV === "development" ? '/api' : '',
   headers: {
     'content-type': 'application/json'
   }

@@ -926,6 +926,9 @@ if(window.Vue && !Vue.prototype.sa) {
 	Vue.prototype.sa = sa;
 }
 
+window.showImage = sa.showImage
+window.showImageList = sa.showImageList
+
 // 对外开放, 在模块化时解开此注释 
 export default sa;
 

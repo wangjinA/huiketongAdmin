@@ -23,7 +23,7 @@
           <el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
         </el-form-item>
         <br />
-      </el-form> -->
+      </el-form>-->
       <!-- 数据栏 -->
       <div class="c-title">通知列表</div>
       <el-table :data="dataList" size="mini">
@@ -44,7 +44,7 @@
           <template slot-scope="s">
             <!-- <el-badge class="item" :is-dot="s.row.is_update" style="margin: 5px 0;">
               <el-button class="c-btn" type="primary" icon="el-icon-edit" @click="update(s.row)">修改</el-button>
-            </el-badge> -->
+            </el-badge>-->
             <el-badge class="item" :is-dot="false" style="margin: 5px 0;">
               <el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button>
             </el-badge>
@@ -58,7 +58,7 @@
           layout="total, prev, pager, next, sizes, jumper"
           :current-page.sync="p.pageNo"
           :page-size.sync="p.pageSize"
-          :total="dataCount"
+          :total="p.dataCount"
           :page-sizes="[1, 10, 20, 30, 40, 50, 100]"
           @current-change="f5()"
           @size-change="f5()"
@@ -100,12 +100,12 @@ export default {
         pageNo: 1,
         pageSize: 10,
         sort_type: 0,
+        dataCount: 0,
       },
-      dataCount: 0,
       dataList: [], // 数据集合
       m: {
-				content: '',
-				type: 2
+        content: "",
+        type: 2,
       },
       curr_m: null, // 当前操作的 m
     };
@@ -115,13 +115,12 @@ export default {
     f5() {
       this.$get("/notice/selectNoticePage", {
         params: {
-          current: 1,
-          pageSize: 50,
+          current: this.p.pageNo,
+          pageSize: this.p.pageSize,
         },
       }).then((res) => {
         this.dataList = res.data.data.list;
-        console.log(this.dataList);
-        console.log(res.data.data.list[0]);
+        this.p.dataCount = res.data.data.total;
       });
     },
     // 保存
@@ -148,22 +147,21 @@ export default {
       });
     },
     // 删除
-    del (data) {
-      this.sa.confirm(
-        "是否删除，此操作不可撤销",
-        ()=>{
-					this.$get('/notice/delete', {
-						params: {
-							id: data.id
-						}
-					}).then(()=>{
-						this.sa.alert("删除成功");
-						this.f5()
-					}).catch(()=>{
-						this.sa.alert("删除失败");
-					})
-				}
-      );
+    del(data) {
+      this.sa.confirm("是否删除，此操作不可撤销", () => {
+        this.$get("/notice/delete", {
+          params: {
+            id: data.id,
+          },
+        })
+          .then(() => {
+            this.sa.alert("删除成功");
+            this.f5();
+          })
+          .catch(() => {
+            this.sa.alert("删除失败");
+          });
+      });
     },
   },
   created() {
