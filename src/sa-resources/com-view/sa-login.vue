@@ -113,7 +113,7 @@ export default {
   name: "sa-login",
   data() {
     return {
-      isShow: false, // 是否显示当前视图
+      isShow: true, // 是否显示当前视图
       m: {
         username: "root",
         password: "123456"
