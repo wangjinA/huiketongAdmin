@@ -73,7 +73,7 @@
       <div class="login-box-2">
         <div class="login-top">
           <img src="./../index/admin-logo.png" class="logo-img" />
-          <span class="admin-title">SA-后台模板</span>
+          <span class="admin-title">会客通小程序 - 后台管理系统</span>
         </div>
         <div class="from-box">
           <h3 class="from-title">账号登录</h3>
