@@ -2,9 +2,9 @@
   <div class="vue-box">
     <div class="c-panel">
       <!-- 参数栏 -->
-      <div class="c-title">用户列表</div>
+      <div class="c-title">酒店列表</div>
       <el-form :inline="true" size="mini">
-        <el-form-item label="酒店名称：">
+        <!-- <el-form-item label="酒店名称：">
           <el-input v-model="p.username" placeholder="模糊查询"></el-input>
         </el-form-item>
         <el-form-item label="管理员：">
@@ -30,7 +30,7 @@
         <el-form-item style="min-width: 0px;">
           <el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
         </el-form-item>
-        <br />
+        <br /> -->
         <!-- <el-form-item label="综合排序：" class="s-radio-text">
 					<el-radio-group v-model="p.sort_type">
 						<el-radio :label="1">注册时间</el-radio>
@@ -51,6 +51,7 @@
         <el-table-column label="酒店星级" prop="starType"></el-table-column>
         <el-table-column label="客房总数" prop="guestRoom"></el-table-column>
         <el-table-column label="联系人姓名" prop="contacts"></el-table-column>
+        <el-table-column label="联系电话" prop="phone"></el-table-column>
         <!-- <el-table-column label="已接单" prop="yfb">
           <template slot-scope="{row}">{{row.yfb}}条</template>
         </el-table-column>

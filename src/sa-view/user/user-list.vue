@@ -47,7 +47,7 @@
         <el-table-column label="邮箱" prop="finitude"></el-table-column>
         <el-table-column label="职位" prop="position"></el-table-column>
         <el-table-column label="出生日期" prop="dateBirth"></el-table-column>
-        <el-table-column label="注册于" prop="creatTime"></el-table-column>
+        <!-- <el-table-column label="注册于" prop="creatTime"></el-table-column> -->
         <!-- <el-table-column label="已发布" prop="yfb">
 					<template slot-scope="{row}">{{row.yfb}}条</template>
 				</el-table-column>
