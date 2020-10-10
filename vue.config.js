@@ -4,7 +4,7 @@ module.exports = {
 	devServer: {
 		proxy: {
 			'/api': {
-				target: 'http://120.27.240.67:8888',
+				target: 'https://hktjs.hktvip.cn',
 				changeOrigin: true,
 				pathRewrite: {
           '^/api': ''

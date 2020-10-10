@@ -58,7 +58,7 @@
         <el-table-column label="已成交" prop="ycj">
           <template slot-scope="{row}">{{row.ycj}}单</template>
         </el-table-column> -->
-        <el-table-column label="是否推荐" prop="ycj">
+        <el-table-column label="是否推荐" prop="recommend">
           <template slot-scope="s">
             <el-switch
               v-model="s.row.recommend"
@@ -67,6 +67,23 @@
               @change="setRecommend(s.row)"
             ></el-switch>
             <span style="color: #999;" v-if="s.row.recommend">推荐</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否签约" prop="signing">
+          <template slot-scope="s">
+            <el-switch
+              v-model="s.row.signing"
+              :active-value="true"
+              :inactive-value="false"
+              @change="setSigning(s.row)"
+              active-color="#13ce66"
+            ></el-switch>
+            <span style="color: #999;" v-if="s.row.signing">签约</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="签约比例" prop="rebate">
+          <template slot-scope="s">
+            <span style="color: #999;">{{s.row.rebate + '%' || 0}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="address" label="操作">
@@ -124,12 +141,38 @@ export default {
     };
   },
   methods: {
+    setRebate(id, rebate) {
+      this.$post('/hotel/setUpTheRebate', {
+        id,
+        rebate,
+      }).then(()=>{
+        this.sa.ok("修改成功");
+        this.f5()
+      }).catch(() => {
+        this.sa.error2("修改失败");
+      })
+    },
+    // 设置是否签约酒店
+    setSigning(data) {
+      this.$post('/hotel/setUpTheSigning', {
+        id: data.id,
+        signing: data.signing
+      }).then(()=>{
+        this.sa.ok("修改成功");
+        this.setRebate(data.id, '10%')
+      }).catch(() => {
+        this.sa.error2("修改失败");
+      })
+    },
+    // 设置是否推荐
     setRecommend(data) {
       this.$post('/hotel/updateRecommend', {
         id: data.id,
         recommend:data.recommend
       }).then(()=>{
         this.sa.ok("修改成功");
+      }).catch(() => {
+        this.sa.error2("修改失败");
       })
     },
     // 数据刷新
