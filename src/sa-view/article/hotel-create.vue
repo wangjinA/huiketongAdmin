@@ -98,8 +98,8 @@ export default {
     f5: function () {
       this.sa.loading('正在加载')
       this.$post("/hotel/getHoteInfolList", {
-        current: 1,
-        pageSize: 20,
+        current: this.p.pageNo,
+        pageSize: this.p.pageSize,
         status: 0, // 审核状态 0全部 1.待审核，2审核通过 3 审核不通过
       }).then((res) => {
         this.dataList = res.data.data.list;

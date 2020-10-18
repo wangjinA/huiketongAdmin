@@ -82,9 +82,21 @@
           </template>
         </el-table-column>
         <el-table-column label="签约比例" prop="rebate">
-          <template slot-scope="s">
-            <span style="color: #999;">{{s.row.rebate + '%' || 0}}</span>
+          <template slot-scope="{row}">
+            <!-- <span style="color: #999;">{{s.row.rebate + '%' || 0}}</span> -->
+            <div style="dispaly: flex;" :class="row.signing && 'rebateModal'">
+              <template v-if="!row.isSetRebate">
+                <span style="padding: 0 10px;">{{row.rebate}}%</span>
+                <el-button class="isSetRebateBtn" type="primary" icon="el-icon-edit" circle size="mini" @click="row.isSetRebate = true"></el-button>
+              </template>
+              <template v-else>
+                <el-input v-model="row.rebate" size="mini"></el-input>
+                <el-button style="margin-top: 10px;" size="mini" type="success" @click="setRebate(row)">确认</el-button>
+                <el-button size="mini" @click="row.isSetRebate = false">取消</el-button>
+              </template>
+            </div>
           </template>
+          
         </el-table-column>
         <!-- <el-table-column prop="address" label="操作">
           <template slot-scope="s">
@@ -136,15 +148,15 @@ export default {
         pageNo: 1,
         pageSize: 10,
       },
-      dataCount: 1422,
+      dataCount: 0,
       dataList: [],
     };
   },
   methods: {
-    setRebate(id, rebate) {
+    setRebate(data) {
       this.$post('/hotel/setUpTheRebate', {
-        id,
-        rebate,
+        id: data.id,
+        rebate: data.rebate,
       }).then(()=>{
         this.sa.ok("修改成功");
         this.f5()
@@ -159,7 +171,10 @@ export default {
         signing: data.signing
       }).then(()=>{
         this.sa.ok("修改成功");
-        this.setRebate(data.id, '10%')
+        this.setRebate({
+          ...data,
+          rebate: '10%'
+        })
       }).catch(() => {
         this.sa.error2("修改失败");
       })
@@ -179,12 +194,15 @@ export default {
     f5: function () {
       this.sa.loading("正在加载");
       this.$post("/hotel/getHotelDataList", {
-        current: 1,
-        pageSize: 20,
+        current: this.p.pageNo,
+        pageSize: this.p.pageSize,
         userName: this.p.userName,
       })
         .then((res) => {
-          this.dataList = res.data.data.list;
+          this.dataList = res.data.data.list.map(item => ({
+            ...item,
+            isSetRebate: false,
+          }));
           this.dataCount = res.data.data.total;
         })
         .finally(() => {
@@ -226,5 +244,12 @@ export default {
 };
 </script>
 
-<style>
+
+<style scoped>
+.isSetRebateBtn{
+  display: none;
+}
+.rebateModal:hover .isSetRebateBtn{
+  display: inline-block;
+}
 </style>

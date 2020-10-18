@@ -106,8 +106,8 @@ export default {
     f5: function () {
       this.sa.loading('正在加载')
       this.$post("/hotel/getAuditHotelList", {
-				current: 1,
-        pageSize: 20,
+        current: this.p.pageNo,
+        pageSize: this.p.pageSize,
       }).then((res) => {
 
         this.dataList = res.data.data.list.map(item => ({

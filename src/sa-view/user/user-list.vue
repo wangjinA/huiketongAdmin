@@ -46,7 +46,7 @@
         <el-table-column label="公司名称" prop="companyName"></el-table-column>
         <el-table-column label="邮箱" prop="finitude"></el-table-column>
         <el-table-column label="职位" prop="position"></el-table-column>
-        <el-table-column label="出生日期" prop="dateBirth"></el-table-column>
+        <!-- <el-table-column label="出生日期" prop="dateBirth"></el-table-column> -->
         <!-- <el-table-column label="注册于" prop="creatTime"></el-table-column> -->
         <!-- <el-table-column label="已发布" prop="yfb">
 					<template slot-scope="{row}">{{row.yfb}}条</template>
@@ -56,11 +56,24 @@
         </el-table-column>-->
         <el-table-column label="积分" prop="integral">
           <template slot-scope="{row}">
-            <div style="dispaly: flex;">
-              <el-input v-model="row.integral" size="mini"></el-input>
-              <el-button size="mini" @click="updateIntegral(row)">确认</el-button>
+            <div style="dispaly: flex;" class="integralModal">
+              <template v-if="!row.isSetIntegral">
+                <span style="padding: 0 10px;">{{row.integral}}</span>
+                <el-button class="isSetIntegralBtn" type="primary" icon="el-icon-edit" circle size="mini" @click="row.isSetIntegral = true"></el-button>
+              </template>
+              <template v-else>
+                <el-input v-model="row.integral" size="mini"></el-input>
+                <el-button style="margin-top: 10px;" size="mini" type="success" @click="updateIntegral(row)">确认</el-button>
+                <el-button size="mini" @click="row.isSetIntegral = false">取消</el-button>
+              </template>
             </div>
           </template>
+        </el-table-column>
+        <el-table-column label="查看下级" prop="look">
+          <template slot-scope="{row}">
+              <el-button type="primary" size="mini"  @click="lookChild(row)">查看</el-button>
+          </template>
+          
         </el-table-column>
         <!-- <el-table-column prop="address" label="操作">
 					<template slot-scope="s">
@@ -112,11 +125,35 @@ export default {
         pageNo: 1,
         pageSize: 10,
       },
-      dataCount: 1422,
+      dataCount: 0,
       dataList: [],
     };
   },
   methods: {
+    lookChild(data) {
+      this.$get('/api/user/getMyLowerLevel', {
+        params: {
+          userId: data.id
+        }
+      }).then(res => {
+        let list = res.data.data.list
+        let str = list.map(item => {
+          console.log(item);
+          return `
+            <p>${item.contacts}：${item.phone}</p>
+          `
+        })
+        console.log(str);
+        str = `
+            <div>
+              <p>邀请人数：${list.length}人</p>
+              ${str}
+            </div>
+          `;
+        this.sa.alert(str);
+      })
+      
+    },
     updateIntegral(data) {
       console.log(data);
       this.sa.loading("正在加载");
@@ -124,23 +161,29 @@ export default {
         id: data.id,
         integral: data.integral,
       })
-        .then(() => {
-
-        })
-        .finally(() => {
-          this.sa.hideLoading();
-        });
+      .then(() => {
+        this.sa.ok("修改成功");
+      })
+      .catch(() => {
+        this.sa.error2("修改失败");
+      })
+      .finally(() => {
+        this.sa.hideLoading();
+      });
     },
     // 数据刷新
     f5: function () {
       this.sa.loading("正在加载");
       this.$post("/api/user/getUserDataList", {
-        current: 1,
-        pageSize: 20,
+        current: this.p.pageNo,
+        pageSize: this.p.pageSize,
         userName: this.p.userName,
       })
         .then((res) => {
-          this.dataList = res.data.data.list;
+          this.dataList = res.data.data.list.map(item => ({
+            ...item,
+            isSetIntegral: false
+          }));
           this.dataCount = res.data.data.total;
         })
         .finally(() => {
@@ -186,5 +229,11 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.isSetIntegralBtn{
+  display: none;
+}
+.integralModal:hover .isSetIntegralBtn{
+  display: inline-block;
+}
 </style>
