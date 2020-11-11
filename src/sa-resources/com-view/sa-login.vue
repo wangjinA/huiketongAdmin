@@ -130,7 +130,7 @@ export default {
       
       // 开始登录
       this.$post("/system/login/system", this.m).then((res) => {
-        localStorage.setItem('token', res.headers.token)
+        sessionStorage.setItem('token', res.headers.token)
         this.isShow = false;
       }).catch(()=>{
         this.sa.error2("账户名或密码错误");

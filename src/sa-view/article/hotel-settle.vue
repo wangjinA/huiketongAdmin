@@ -82,10 +82,8 @@
 </template>
 
 <script>
-import addOrUpdate from "./art-add.vue";
 export default {
   components: {
-    addOrUpdate,
   },
   data() {
     return {

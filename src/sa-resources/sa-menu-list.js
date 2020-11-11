@@ -39,20 +39,10 @@ export default [
 		icon: 'el-icon-table-lamp',
 		info: '首页的一些设置',
 		childList: [
-			{id: '3-1', name: '轮播图设置', view: () => import('@/sa-view/home/swiper-list.vue')},
+			{id: '3-1', name: '轮播广告设置', view: () => import('@/sa-view/home/swiper-list.vue')},
 			{id: '3-2', name: '广播设置', view: () => import('@/sa-view/home/notice.vue')}
 		]
 	},
-	// {
-	// 	id: '4',
-	// 	name: '权限控制',
-	// 	icon: 'el-icon-unlock',
-	// 	info: '对系统角色权限的分配等设计，敏感度较高，请谨慎授权',
-	// 	childList: [
-	// 		{id: '4-1', name: '角色列表', view: () => import('@/sa-view/role/role-list.vue') },
-	// 		{id: '4-2', name: '菜单预览', view: () => import('@/sa-view/role/menu-list.vue') }
-	// 	]
-	// },
 	{
 		id: '5',
 		name: '用户管理',
@@ -64,20 +54,40 @@ export default [
 			{id: '5-3', name: '后台用户', view: () => import('@/sa-view/user/admin-list.vue')  },
 			// {id: '5-3', name: '用户添加', view: () => import('@/sa-view/user/user-add.vue'), params: {username: '王铁汉'} },
 		],
-		
-		// let template = '<div class="iframe-view-box"><iframe class="iframe-view" src="' + menu.url + '"></iframe></div>';
-		// menu.view = ()=> ({template: template});
-		
+	},
+	{
+		id: '8',
+		name: '订单管理',
+		icon: 'el-icon-document-copy',
+		info: '会议订单和婚宴订单...',
+		childList: [
+			{id: '8-1', name: '会议订单', view: () => import('@/sa-view/order/huiyi-order.vue')  },
+			{id: '8-2', name: '婚宴订单', view: () => import('@/sa-view/order/hunyan-order.vue')  },
+		],
 	},
 	{
 		id: '6',
 		name: '审核管理',
-		icon: 'el-icon-document-copy',
+		icon: 'el-icon-s-check',
 		info: '对酒店的',
 		childList: [
 			{id: '6-1', name: '酒店审核', view: () => import('@/sa-view/article/hotel-create.vue') },
 			{id: '6-2', name: '入驻审核', view: () => import('@/sa-view/article/hotel-settle.vue') },
 		]
+	},
+	{
+		id: '4',
+		name: '商城管理',
+		icon: 'el-icon-s-goods',
+		info: '商城管理',
+		childList: [
+			{id: '7-1', name: '商品列表', view: () => import('@/sa-view/mall/mall.vue') },
+			{id: '7-2', name: '商城订单', view: () => import('@/sa-view/mall/mallOrder.vue') },
+		]
+		// childList: [
+		// 	{id: '4-1', name: '角色列表', view: () => import('@/sa-view/role/role-list.vue') },
+		// 	{id: '4-2', name: '菜单预览', view: () => import('@/sa-view/role/menu-list.vue') }
+		// ]
 	},
 	//  ========= 示例 指定一个函数, 点击菜单时执行这个函数 ================
 	// {

@@ -966,6 +966,10 @@ export default {
 	mounted: function(){
 		this.initWindow();
 		this.SaAdminInIt(this.sa_admin, this.sa);
+		
+		if(sessionStorage.getItem('token')){
+			this.$refs['sa-login'].isShow = false
+		}
 	},
 	
 };

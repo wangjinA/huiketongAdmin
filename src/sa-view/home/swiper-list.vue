@@ -33,7 +33,7 @@
 				</el-form-item>
       </el-form>-->
       <!-- 数据栏 -->
-      <div class="c-title">轮播图列表</div>
+      <div class="c-title">轮播广告列表</div>
       <el-table :data="bannerList" size="mini">
         <el-table-column prop="bannerId" label="编号" width="70px"></el-table-column>
         <el-table-column label="图片" width="300px">

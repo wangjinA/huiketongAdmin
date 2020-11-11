@@ -41,8 +41,13 @@
         </el-table-column>
         <el-table-column label="微信昵称" prop="name"></el-table-column>
         <el-table-column label="姓名" prop="contacts"></el-table-column>
-        <el-table-column label="性别" prop="sex"></el-table-column>
-        <el-table-column label="手机号" prop="phone" width="200px"></el-table-column>
+        <!-- <el-table-column label="性别" prop="sex"></el-table-column> -->
+        <el-table-column label="性别" prop="sex">
+          <template slot-scope="{row}">
+            {{row.sex ? '男' :'女 '}}
+          </template>
+        </el-table-column>
+        <el-table-column label="手机号" prop="phone" ></el-table-column>
         <el-table-column label="公司名称" prop="companyName"></el-table-column>
         <el-table-column label="邮箱" prop="finitude"></el-table-column>
         <el-table-column label="职位" prop="position"></el-table-column>

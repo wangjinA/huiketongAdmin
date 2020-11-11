@@ -154,6 +154,13 @@ export default {
   },
   methods: {
     setRebate(data) {
+      if(data.rebate < 0) {
+        return this.sa.error2("签约比例需要>0");
+      }else if(data.rebate > 100){
+        return this.sa.error2("签约比例需要<100");
+      }else if(isNaN(Number(data.rebate))){
+        return this.sa.error2("请输入数字");
+      }
       this.$post('/hotel/setUpTheRebate', {
         id: data.id,
         rebate: data.rebate,
@@ -173,7 +180,7 @@ export default {
         this.sa.ok("修改成功");
         this.setRebate({
           ...data,
-          rebate: '10%'
+          rebate: 10
         })
       }).catch(() => {
         this.sa.error2("修改失败");
