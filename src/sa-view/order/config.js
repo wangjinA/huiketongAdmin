@@ -2,7 +2,7 @@ export const getStatusText = (status) => {
   let statusText = ''
   switch (status) {
     case 1:
-      statusText = '暂未接单'
+      statusText = '等待接单'
       break;
     case 2:
       statusText = '失效订单'

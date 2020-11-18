@@ -69,7 +69,7 @@
     </div>-->
 
     <!-- 增改组件 -->
-    <add-or-update ref="add-or-update"></add-or-update>
+    <!-- <add-or-update ref="add-or-update"></add-or-update> -->
   </div>
 </template>
 

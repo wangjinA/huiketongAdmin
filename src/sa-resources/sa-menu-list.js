@@ -39,8 +39,8 @@ export default [
 		icon: 'el-icon-table-lamp',
 		info: '首页的一些设置',
 		childList: [
-			{id: '3-1', name: '轮播广告设置', view: () => import('@/sa-view/home/swiper-list.vue')},
-			{id: '3-2', name: '广播设置', view: () => import('@/sa-view/home/notice.vue')}
+			{ id: '3-1', name: '轮播广告设置', view: () => import('@/sa-view/home/swiper-list.vue') },
+			{ id: '3-2', name: '广播设置', view: () => import('@/sa-view/home/notice.vue') }
 		]
 	},
 	{
@@ -49,9 +49,9 @@ export default [
 		icon: 'el-icon-user',
 		info: '对用户列表、添加、统计等等...',
 		childList: [
-			{id: '5-1', name: '用户列表', view: () => import('@/sa-view/user/user-list.vue')  },
-			{id: '5-2', name: '酒店列表', view: () => import('@/sa-view/user/hotel-list.vue')  },
-			{id: '5-3', name: '后台用户', view: () => import('@/sa-view/user/admin-list.vue')  },
+			{ id: '5-1', name: '用户列表', view: () => import('@/sa-view/user/user-list.vue') },
+			{ id: '5-2', name: '酒店列表', view: () => import('@/sa-view/user/hotel-list.vue') },
+			{ id: '5-3', name: '后台用户', view: () => import('@/sa-view/user/admin-list.vue') },
 			// {id: '5-3', name: '用户添加', view: () => import('@/sa-view/user/user-add.vue'), params: {username: '王铁汉'} },
 		],
 	},
@@ -61,8 +61,8 @@ export default [
 		icon: 'el-icon-document-copy',
 		info: '会议订单和婚宴订单...',
 		childList: [
-			{id: '8-1', name: '会议订单', view: () => import('@/sa-view/order/huiyi-order.vue')  },
-			{id: '8-2', name: '婚宴订单', view: () => import('@/sa-view/order/hunyan-order.vue')  },
+			{ id: '8-1', name: '会议订单', view: () => import('@/sa-view/order/huiyi-order.vue') },
+			{ id: '8-2', name: '婚宴订单', view: () => import('@/sa-view/order/hunyan-order.vue') },
 		],
 	},
 	{
@@ -71,8 +71,8 @@ export default [
 		icon: 'el-icon-s-check',
 		info: '对酒店的',
 		childList: [
-			{id: '6-1', name: '酒店审核', view: () => import('@/sa-view/article/hotel-create.vue') },
-			{id: '6-2', name: '入驻审核', view: () => import('@/sa-view/article/hotel-settle.vue') },
+			{ id: '6-1', name: '酒店审核', view: () => import('@/sa-view/article/hotel-create.vue') },
+			{ id: '6-2', name: '入驻审核', view: () => import('@/sa-view/article/hotel-settle.vue') },
 		]
 	},
 	{
@@ -81,12 +81,25 @@ export default [
 		icon: 'el-icon-s-goods',
 		info: '商城管理',
 		childList: [
-			{id: '7-1', name: '商品列表', view: () => import('@/sa-view/mall/mall.vue') },
-			{id: '7-2', name: '商城订单', view: () => import('@/sa-view/mall/mallOrder.vue') },
+			{ id: '7-1', name: '商品列表', view: () => import('@/sa-view/mall/mall.vue') },
+			{ id: '7-2', name: '商城订单', view: () => import('@/sa-view/mall/mallOrder.vue') },
 		]
 		// childList: [
 		// 	{id: '4-1', name: '角色列表', view: () => import('@/sa-view/role/role-list.vue') },
 		// 	{id: '4-2', name: '菜单预览', view: () => import('@/sa-view/role/menu-list.vue') }
+		// ]
+	},
+
+	//  ========= 示例 指定一个函数, 点击菜单时执行这个函数 ================
+	{
+		id: '7',
+		name: '系统设置',
+		icon: 'el-icon-setting',
+		view: () => import('@/sa-view/system/system.vue')
+		// childList: [
+		// 	{
+		// 		id: '8-1', name: '', view: () => import('@/sa-view/mall/mall.vue') 
+		// 	},
 		// ]
 	},
 	//  ========= 示例 指定一个函数, 点击菜单时执行这个函数 ================
@@ -135,8 +148,8 @@ export default [
 	// 	is_show: false// 隐藏
 	// },
 	// {id: '1-11', name: '在线论坛', url: 'http://applist.dev33.cn/applist-admin/html/ser-comment/w-list.html?sid=4nqjfqbyw6fh', is_show: false},
-	
-	
-	
+
+
+
 ]
 

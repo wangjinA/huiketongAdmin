@@ -17,8 +17,16 @@
 					<el-date-picker v-model="p.start_time" type="date" value-format="yyyy-MM-dd" placeholder="开始日期"></el-date-picker> - 
 					<el-date-picker v-model="p.end_time" type="date" value-format="yyyy-MM-dd" placeholder="结束日期"></el-date-picker>
         </el-form-item>-->
-        <el-form-item style="min-width: 0px;">
-          <el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+        <el-form-item style="min-width: 0px">
+          <el-button
+            type="primary"
+            icon="el-icon-search"
+            @click="
+              p.pageNo = 1;
+              f5();
+            "
+            >查询</el-button
+          >
         </el-form-item>
         <br />
         <!-- <el-form-item label="综合排序：" class="s-radio-text">
@@ -35,19 +43,23 @@
       <el-table :data="dataList">
         <!-- <el-table-column label="编号" prop="id" width="70px" > </el-table-column> -->
         <el-table-column label="头像" prop="url">
-          <template slot-scope="{row}">
-            <img :src="row.url" style="width:80px;height:80px;" @click="sa.showImage(row.url)"/>
+          <template slot-scope="{ row }">
+            <img
+              :src="row.url"
+              style="width: 80px; height: 80px"
+              @click="sa.showImage(row.url)"
+            />
           </template>
         </el-table-column>
         <el-table-column label="微信昵称" prop="name"></el-table-column>
         <el-table-column label="姓名" prop="contacts"></el-table-column>
         <!-- <el-table-column label="性别" prop="sex"></el-table-column> -->
         <el-table-column label="性别" prop="sex">
-          <template slot-scope="{row}">
-            {{row.sex ? '男' :'女 '}}
+          <template slot-scope="{ row }">
+            {{ row.sex ? "男" : "女 " }}
           </template>
         </el-table-column>
-        <el-table-column label="手机号" prop="phone" ></el-table-column>
+        <el-table-column label="手机号" prop="phone"></el-table-column>
         <el-table-column label="公司名称" prop="companyName"></el-table-column>
         <el-table-column label="邮箱" prop="finitude"></el-table-column>
         <el-table-column label="职位" prop="position"></el-table-column>
@@ -60,25 +72,43 @@
 					<template slot-scope="{row}">{{row.ycj}}单</template>
         </el-table-column>-->
         <el-table-column label="积分" prop="integral">
-          <template slot-scope="{row}">
-            <div style="dispaly: flex;" class="integralModal">
+          <template slot-scope="{ row }">
+            <div style="dispaly: flex" class="integralModal">
               <template v-if="!row.isSetIntegral">
-                <span style="padding: 0 10px;">{{row.integral}}</span>
-                <el-button class="isSetIntegralBtn" type="primary" icon="el-icon-edit" circle size="mini" @click="row.isSetIntegral = true"></el-button>
+                <span style="padding: 0 10px">{{ row.integral }}</span>
+                <el-button
+                  class="isSetIntegralBtn"
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                  size="mini"
+                  @click="
+                    (row.oldIntegral = row.integral), (row.isSetIntegral = true)
+                  "
+                ></el-button>
               </template>
               <template v-else>
                 <el-input v-model="row.integral" size="mini"></el-input>
-                <el-button style="margin-top: 10px;" size="mini" type="success" @click="updateIntegral(row)">确认</el-button>
-                <el-button size="mini" @click="row.isSetIntegral = false">取消</el-button>
+                <el-button
+                  style="margin-top: 10px"
+                  size="mini"
+                  type="success"
+                  @click="updateIntegral(row)"
+                  >确认</el-button
+                >
+                <el-button size="mini" @click="row.isSetIntegral = false, row.integral = row.oldIntegral"
+                  >取消</el-button
+                >
               </template>
             </div>
           </template>
         </el-table-column>
         <el-table-column label="查看下级" prop="look">
-          <template slot-scope="{row}">
-              <el-button type="primary" size="mini"  @click="lookChild(row)">查看</el-button>
+          <template slot-scope="{ row }">
+            <el-button type="primary" size="mini" @click="lookChild(row)"
+              >查看</el-button
+            >
           </template>
-          
         </el-table-column>
         <!-- <el-table-column prop="address" label="操作">
 					<template slot-scope="s">
@@ -136,18 +166,18 @@ export default {
   },
   methods: {
     lookChild(data) {
-      this.$get('/api/user/getMyLowerLevel', {
+      this.$get("/api/user/getMyLowerLevel", {
         params: {
-          userId: data.id
-        }
-      }).then(res => {
-        let list = res.data.data.list
-        let str = list.map(item => {
+          userId: data.id,
+        },
+      }).then((res) => {
+        let list = res.data.data.list;
+        let str = list.map((item) => {
           console.log(item);
           return `
             <p>${item.contacts}：${item.phone}</p>
-          `
-        })
+          `;
+        });
         console.log(str);
         str = `
             <div>
@@ -156,25 +186,31 @@ export default {
             </div>
           `;
         this.sa.alert(str);
-      })
-      
+      });
     },
     updateIntegral(data) {
-      console.log(data);
+      if (data.integral < 0) {
+        return this.sa.error2("数值错误");
+      }
+      const val = data.integral - data.oldIntegral;
       this.sa.loading("正在加载");
-      this.$post("/api/user/updateUserInfo", {
+      this.$post("/api/user/updateUserIntegral", {
         id: data.id,
-        integral: data.integral,
+        integral: val,
       })
-      .then(() => {
-        this.sa.ok("修改成功");
-      })
-      .catch(() => {
-        this.sa.error2("修改失败");
-      })
-      .finally(() => {
-        this.sa.hideLoading();
-      });
+        .then(() => {
+          this.sa.ok("修改成功");
+          this.f5()
+          data.isSetIntegral = false
+        })
+        .catch(() => {
+          this.sa.error2("修改失败");
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.sa.hideLoading();
+          }, 2000);
+        });
     },
     // 数据刷新
     f5: function () {
@@ -185,9 +221,9 @@ export default {
         userName: this.p.userName,
       })
         .then((res) => {
-          this.dataList = res.data.data.list.map(item => ({
+          this.dataList = res.data.data.list.map((item) => ({
             ...item,
-            isSetIntegral: false
+            isSetIntegral: false,
           }));
           this.dataCount = res.data.data.total;
         })
@@ -235,10 +271,10 @@ export default {
 </script>
 
 <style scoped>
-.isSetIntegralBtn{
+.isSetIntegralBtn {
   display: none;
 }
-.integralModal:hover .isSetIntegralBtn{
+.integralModal:hover .isSetIntegralBtn {
   display: inline-block;
 }
 </style>
