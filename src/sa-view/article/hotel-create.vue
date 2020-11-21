@@ -98,7 +98,7 @@ export default {
       this.$post("/hotel/getHoteInfolList", {
         current: this.p.pageNo,
         pageSize: this.p.pageSize,
-        status: 0, // 审核状态 0全部 1.待审核，2审核通过 3 审核不通过
+        status: 1, // 审核状态 0全部 1.待审核，2审核通过 3 审核不通过
       }).then((res) => {
         this.dataList = res.data.data.list;
         this.dataCount = res.data.data.total
