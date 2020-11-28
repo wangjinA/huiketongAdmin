@@ -86,7 +86,7 @@
             <!-- <span style="color: #999;">{{s.row.rebate + '%' || 0}}</span> -->
             <div style="dispaly: flex;" :class="row.signing && 'rebateModal'">
               <template v-if="!row.isSetRebate">
-                <span style="padding: 0 10px;">{{row.rebate}}%</span>
+                <span style="padding: 0 10px;">{{row.rebate || 0}}%</span>
                 <el-button class="isSetRebateBtn" type="primary" icon="el-icon-edit" circle size="mini" @click="row.isSetRebate = true"></el-button>
               </template>
               <template v-else>

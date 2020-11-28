@@ -29,6 +29,7 @@
         <el-table-column label="酒店星级" prop="starType"></el-table-column>
         <el-table-column label="客房总数" prop="guestRoom"></el-table-column>
         <el-table-column label="联系人姓名" prop="contacts"></el-table-column>
+        <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <el-table-column prop="address" label="操作" width="250px">
           <template slot-scope="s">
             <el-button class="c-btn" type="info" icon="el-icon-view" @click="get(s.row)">联系人信息</el-button>

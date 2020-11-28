@@ -118,7 +118,7 @@
         <el-form-item label="商品图片：">
           <template v-if="m.integralImgStr && m.integralImgStr.length">
             <span
-              style="position: relative; display: inline-block"
+              style="position: relative; display: inline-block; margin-left: 20px"
               v-for="(item, index) in m.integralImgStr"
               :key="index"
             >
@@ -147,7 +147,7 @@
           >
           <!-- <el-button type="primary" style="margin-left: 20px;" @click="selectImg">选择图片</el-button> -->
           <el-upload
-            style="display: inline-block; margin-left: 20px"
+            style="display: inline-block;"
             action
             :before-upload="beforeUpload"
           >

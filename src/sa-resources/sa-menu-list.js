@@ -71,8 +71,8 @@ export default [
 		icon: 'el-icon-s-check',
 		info: '对酒店的',
 		childList: [
-			{ id: '6-1', name: '酒店审核', view: () => import('@/sa-view/article/hotel-create.vue') },
-			{ id: '6-2', name: '入驻审核', view: () => import('@/sa-view/article/hotel-settle.vue') },
+			{ id: '6-1', name: '酒店审核', view: () => import('@/sa-view/hotel/hotel-create.vue') },
+			{ id: '6-2', name: '入驻审核', view: () => import('@/sa-view/hotel/hotel-settle.vue') },
 		]
 	},
 	{

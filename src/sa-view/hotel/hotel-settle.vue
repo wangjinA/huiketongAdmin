@@ -27,6 +27,7 @@
         <el-table-column label="联系电话" prop="phone"></el-table-column>
         <el-table-column label="职位" prop="position"></el-table-column>
         <el-table-column label="邮箱" prop="finitude"></el-table-column>
+        <el-table-column label="创建时间" prop="createTime"></el-table-column>
         <!-- <el-table-column label="名片" prop="see_count">
           <template slot-scope="{row}">
             <img

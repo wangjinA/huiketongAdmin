@@ -22,6 +22,12 @@ export const getStatusText = (status) => {
     case 7:
       statusText = '酒店拒绝消费单'
       break;
+    case 8:
+      statusText = '订单已过期'
+      break;
+    case 9:
+      statusText = '后台确认完成'
+      break;
   }
   return statusText
 }
@@ -32,17 +38,37 @@ const getPickerData = data => {
   }))
 }
 const getCommon = (data, value) => {
-  if(value){ // 优先匹配value，其次再匹配name
+  if (value) { // 优先匹配value，其次再匹配name
     let item = data.filter(item => item.value.toString() == value.toString())[0]
-    if(item) { 
+    if (item) {
       return item ? item.name : item
-    }else {
+    } else {
       let item = data.filter(item => item.name == value)[0]
       return item ? item.value : item
     }
   }
   return getPickerData(data)
 }
+export const rnzs = value => { // 容纳桌数
+  let data = [{
+    name: '10桌以下',
+    value: [0, 10],
+  }, {
+    name: '10-20桌',
+    value: [10, 20],
+  }, {
+    name: '20-30桌',
+    value: [20, 30],
+  }, {
+    name: '30-40桌',
+    value: [30, 40],
+  }, {
+    name: '40桌以上',
+    value: [40, 0],
+  }]
+  return getCommon(data, value)
+}
+
 export const rs = value => { // 参会人数
   let data = [{
     name: '10~50人',
