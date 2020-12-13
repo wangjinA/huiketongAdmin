@@ -62,6 +62,12 @@
         <el-table-column label="订单状态">
           <template slot-scope="s">{{ s.row.status | getStatusText }}</template>
         </el-table-column>
+        <el-table-column label="返回积分">
+          <template slot-scope="s">{{ s.row. integral }}</template>
+        </el-table-column>
+        <el-table-column label="返回比率">
+          <template slot-scope="s">{{ s.row.ratio ? `${s.row.ratio * 100}%` : '-' }}</template>
+        </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="s">
             <div v-if="s.row.status >= 4">
@@ -219,7 +225,9 @@ export default {
   },
   methods: {
     okOver(row) {
-      this.sa.confirm("是否确认完成", () => {
+      this.sa.confirm(`是否确认完成?<br/> 
+      返回积分：<span style="color: #409EFF;">${row.integral}</span>  
+      积分比率：<span style="color: #409EFF;">${row.ratio * 100}%</span>`, () => {
         this.$post('/demandorder/systemOrederComplete', {
           objId: row.meetingId,
           type: 1  // 1.会议，2.婚宴

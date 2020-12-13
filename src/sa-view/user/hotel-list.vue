@@ -66,7 +66,7 @@
               :inactive-value="false"
               @change="setRecommend(s.row)"
             ></el-switch>
-            <span style="color: #999;" v-if="s.row.recommend">推荐</span>
+            <span style="color: #999" v-if="s.row.recommend">推荐</span>
           </template>
         </el-table-column>
         <el-table-column label="是否签约" prop="signing">
@@ -78,32 +78,48 @@
               @change="setSigning(s.row)"
               active-color="#13ce66"
             ></el-switch>
-            <span style="color: #999;" v-if="s.row.signing">签约</span>
+            <span style="color: #999" v-if="s.row.signing">签约</span>
           </template>
         </el-table-column>
         <el-table-column label="签约比例" prop="rebate">
-          <template slot-scope="{row}">
+          <template slot-scope="{ row }">
             <!-- <span style="color: #999;">{{s.row.rebate + '%' || 0}}</span> -->
-            <div style="dispaly: flex;" :class="row.signing && 'rebateModal'">
+            <div style="dispaly: flex" :class="row.signing && 'rebateModal'">
               <template v-if="!row.isSetRebate">
-                <span style="padding: 0 10px;">{{row.rebate || 0}}%</span>
-                <el-button class="isSetRebateBtn" type="primary" icon="el-icon-edit" circle size="mini" @click="row.isSetRebate = true"></el-button>
+                <span style="padding: 0 10px">{{ row.rebate || 0 }}%</span>
+                <el-button
+                  class="isSetRebateBtn"
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                  size="mini"
+                  @click="row.isSetRebate = true"
+                ></el-button>
               </template>
               <template v-else>
                 <el-input v-model="row.rebate" size="mini"></el-input>
-                <el-button style="margin-top: 10px;" size="mini" type="success" @click="setRebate(row)">确认</el-button>
-                <el-button size="mini" @click="row.isSetRebate = false">取消</el-button>
+                <el-button
+                  style="margin-top: 10px"
+                  size="mini"
+                  type="success"
+                  @click="setRebate(row)"
+                  >确认</el-button
+                >
+                <el-button size="mini" @click="row.isSetRebate = false"
+                  >取消</el-button
+                >
               </template>
             </div>
           </template>
-          
         </el-table-column>
-        <!-- <el-table-column prop="address" label="操作">
+        <el-table-column prop="address" label="操作">
           <template slot-scope="s">
-            <el-button class="c-btn" type="success" icon="el-icon-view" @click="get(s.row)">详情</el-button>
-            <el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button>
+            <el-button class="c-btn" type="primary" @click="get(s.row)"
+              >员工管理</el-button
+            >
+            <!-- <el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button> -->
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
       <!-- 分页 -->
       <div class="page-box">
@@ -154,48 +170,54 @@ export default {
   },
   methods: {
     setRebate(data) {
-      if(data.rebate < 0) {
+      if (data.rebate < 0) {
         return this.sa.error2("签约比例需要>0");
-      }else if(data.rebate > 100){
+      } else if (data.rebate > 100) {
         return this.sa.error2("签约比例需要<100");
-      }else if(isNaN(Number(data.rebate))){
+      } else if (isNaN(Number(data.rebate))) {
         return this.sa.error2("请输入数字");
       }
-      this.$post('/hotel/setUpTheRebate', {
+      this.$post("/hotel/setUpTheRebate", {
         id: data.id,
         rebate: data.rebate,
-      }).then(()=>{
-        this.sa.ok("修改成功");
-        this.f5()
-      }).catch(() => {
-        this.sa.error2("修改失败");
       })
+        .then(() => {
+          this.sa.ok("修改成功");
+          this.f5();
+        })
+        .catch(() => {
+          this.sa.error2("修改失败");
+        });
     },
     // 设置是否签约酒店
     setSigning(data) {
-      this.$post('/hotel/setUpTheSigning', {
+      this.$post("/hotel/setUpTheSigning", {
         id: data.id,
-        signing: data.signing
-      }).then(()=>{
-        this.sa.ok("修改成功");
-        this.setRebate({
-          ...data,
-          rebate: 10
-        })
-      }).catch(() => {
-        this.sa.error2("修改失败");
+        signing: data.signing,
       })
+        .then(() => {
+          this.sa.ok("修改成功");
+          this.setRebate({
+            ...data,
+            rebate: 10,
+          });
+        })
+        .catch(() => {
+          this.sa.error2("修改失败");
+        });
     },
     // 设置是否推荐
     setRecommend(data) {
-      this.$post('/hotel/updateRecommend', {
+      this.$post("/hotel/updateRecommend", {
         id: data.id,
-        recommend:data.recommend
-      }).then(()=>{
-        this.sa.ok("修改成功");
-      }).catch(() => {
-        this.sa.error2("修改失败");
+        recommend: data.recommend,
       })
+        .then(() => {
+          this.sa.ok("修改成功");
+        })
+        .catch(() => {
+          this.sa.error2("修改失败");
+        });
     },
     // 数据刷新
     f5: function () {
@@ -206,7 +228,7 @@ export default {
         userName: this.p.userName,
       })
         .then((res) => {
-          this.dataList = res.data.data.list.map(item => ({
+          this.dataList = res.data.data.list.map((item) => ({
             ...item,
             isSetRebate: false,
           }));
@@ -233,15 +255,35 @@ export default {
     },
     // 查看
     get: function (data) {
-      console.log(data.name);
+      console.log(data);
       var str = `
           <div>
-            <p>酒店员工：3人</p>
-            <p>小汪：1527048182 <span class="el-button c-btn el-button--danger" type="danger" icon="el-icon-delete" @click="del">删除</span></p>
-            <p>小吴：1307276666 <span class="el-button c-btn el-button--danger" type="danger" icon="el-icon-delete" @click="del">删除</span></p>
-            <p>小冲：1389997555 <span class="el-button c-btn el-button--danger" type="danger" icon="el-icon-delete" @click="del">删除</span></p>
+            <p>酒店员工：<span class="ygLength">0</span>人</p>
+            <div class="ygList">
+            </div>
           </div>
         `;
+      this.$get("/hotel/getHoteSysUserById", {
+        params: {
+          hotelId: data.id
+        },
+      }).then((res) => {
+        this.$nextTick(() => {
+          console.log(res);
+          
+          // let ygList = document.querySelector('.ygList')
+          // let ygLength = document.querySelector('.ygLength')
+          // let list = res.data.data.list
+          // ygLength.innerHTML = list.length
+          // let hmtlStr = ''
+          // list.forEach(item => {
+          //   hmtlStr += `
+          //     <p>小汪：${item.contacts} <span class="el-button c-btn el-button--danger" type="danger" icon="el-icon-delete" @click="del">删除</span></p>
+          //   `
+          // })
+          // ygList.innerHTML = hmtlStr
+        })
+      });
       this.sa.alert(str);
     },
   },
@@ -253,10 +295,10 @@ export default {
 
 
 <style scoped>
-.isSetRebateBtn{
+.isSetRebateBtn {
   display: none;
 }
-.rebateModal:hover .isSetRebateBtn{
+.rebateModal:hover .isSetRebateBtn {
   display: inline-block;
 }
 </style>
