@@ -46,7 +46,7 @@
           <template slot-scope="{ row }">
             <img
               :src="row.url"
-              style="width: 80px; height: 80px"
+              style="width: 50px; height: 50px"
               @click="sa.showImage(row.url)"
             />
           </template>

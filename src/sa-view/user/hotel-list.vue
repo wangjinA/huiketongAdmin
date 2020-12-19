@@ -117,7 +117,7 @@
             <el-button class="c-btn" type="primary" @click="get(s.row)"
               >员工管理</el-button
             >
-            <!-- <el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button> -->
+            <el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -135,12 +135,37 @@
         ></el-pagination>
       </div>
     </div>
-    <!-- 给layer打一波广告 -->
-    <!-- <div class="c-panel" style="background-color: rgba(0,0,0,0);">
-			layer：<el-link type="primary" href="http://layer.layui.com/" target="_blank">
-				一个可以让你想到即可做到的JavaScript弹窗（层）解决方案
-			</el-link>
-    </div>-->
+    <el-dialog append-to-body :title="`${currentRow.hotelName} 员工管理`" :visible.sync="dialogTableVisible">
+      <el-table :data="ygList">
+        <el-table-column
+          property="name"
+          label="微信昵称"
+        ></el-table-column>
+        <el-table-column
+          property="contacts"
+          label="姓名"
+        ></el-table-column>
+        <el-table-column
+          property="phone"
+          label="联系电话"
+        ></el-table-column>
+        <el-table-column
+          property="finitude"
+          label="邮箱"
+        ></el-table-column>
+        <el-table-column
+          property="position"
+          label="职位"
+        ></el-table-column>
+        <el-table-column prop="address" label="操作" width="250px">
+          <template slot-scope="s">
+						<el-button class="c-btn" type="info"  icon="el-icon-view" @click="getMp(s.row)">名片信息</el-button>
+            <!-- <el-button class="c-btn" type="success" icon="el-icon-check" @click="shenhe(s.row, 2)">同意</el-button> -->
+            <el-button class="c-btn" type="danger" icon="el-icon-close" @click="remove(s.row)">删除员工</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -166,6 +191,9 @@ export default {
       },
       dataCount: 0,
       dataList: [],
+      dialogTableVisible: false,
+      ygList: [],
+      currentRow: {}
     };
   },
   methods: {
@@ -225,7 +253,6 @@ export default {
       this.$post("/hotel/getHotelDataList", {
         current: this.p.pageNo,
         pageSize: this.p.pageSize,
-        userName: this.p.userName,
       })
         .then((res) => {
           this.dataList = res.data.data.list.map((item) => ({
@@ -240,37 +267,75 @@ export default {
     },
     // 删除
     del: function (data) {
-      this.sa.confirm(
-        "是否删除，此操作不可撤销",
-        function () {
-          this.sa.ajax2(
-            "/user/delete?id=" + data.id,
-            function () {
-              this.sa.arrayDelete(this.dataList, data);
-              this.sa.ok("删除成功");
-            }.bind(this)
-          );
-        }.bind(this)
-      );
-    },
-    // 查看
-    get: function (data) {
       console.log(data);
+      console.log(data.id);
+      this.sa.confirm(`是否确认删除该酒店(${data.hotelName})` , () => {
+        this.$get('/hotel/deleteHotel', {
+          params: {
+            hotelId: data.id
+          }
+        }).then(()=>{
+          this.sa.ok("删除成功");
+          this.f5()
+        })
+      })
+    },
+    remove(data) {
+      console.log(data);
+      console.log(data.id);
+      
+      this.sa.confirm(`是否确认删除该员工(${data.contacts || data.name})`, () => {
+        this.$get('/api/user/deleteSysUserByUserId', {
+          params: {
+            userId: data.id
+          }
+        }).then(()=>{
+          this.sa.ok("删除成功");
+          this.get(this.currentRow)
+        })
+      })
+    },
+    // 名片
+    getMp(data){
+			console.log(data.name);
+      let imgStr = ''
+      if(data.callingCard){
+        let imgList = JSON.stringify(JSON.parse(data.callingCard).map(item=>item.url))
+        JSON.parse(data.callingCard).forEach((item, index) => {
+          imgStr += `
+            <p>
+              <img style="width: 200px;height:100px;object-fit:cover;" 
+              src="${item.url}" onclick='showImageList(${imgList}, ${index})'/>
+            </p>`
+        })
+      }
       var str = `
           <div>
-            <p>酒店员工：<span class="ygLength">0</span>人</p>
-            <div class="ygList">
-            </div>
+						<p>名片：</p>
+						${imgStr || '无'}
           </div>
         `;
+      this.sa.alert(str);
+    },
+    // 查看酒店员工
+    get: function (data) {
+      this.currentRow = data
+      this.dialogTableVisible = true
+      // var str = `
+      //     <div>
+      //       <p>酒店员工：<span class="ygLength">0</span>人</p>
+      //       <div class="ygList">
+      //       </div>
+      //     </div>
+      //   `;
       this.$get("/hotel/getHoteSysUserById", {
         params: {
-          hotelId: data.id
+          hotelId: data.id,
         },
       }).then((res) => {
         this.$nextTick(() => {
           console.log(res);
-          
+          this.ygList = res.data.data.list
           // let ygList = document.querySelector('.ygList')
           // let ygLength = document.querySelector('.ygLength')
           // let list = res.data.data.list
@@ -282,9 +347,9 @@ export default {
           //   `
           // })
           // ygList.innerHTML = hmtlStr
-        })
+        });
       });
-      this.sa.alert(str);
+      // this.sa.alert(str);
     },
   },
   created: function () {

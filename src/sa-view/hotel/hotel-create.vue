@@ -114,7 +114,9 @@ export default {
         this.$post("/hotel/auditHotelStatus", {
           hotelId: data.id,
           status,
-        });
+        }).then(() => {
+          this.sa.ok(status == 2 ? "已同意" : "已拒绝");
+        })
       });
     },
     // 增加

@@ -22,7 +22,12 @@ import './static/sa.css';
 import SaAdminInIt from './sa-resources/sa-admin-init.js';
 Vue.prototype.SaAdminInIt = SaAdminInIt;
 
-
+// 数字递增
+import vCountup from 'vue-countupjs'
+vCountup.props.options.default = () => ({
+  separator: ''
+})
+Vue.use(vCountup)
 // 打开vue 
 new Vue({
 	render: h => h(App)
