@@ -212,7 +212,9 @@ export default {
   },
   created() {
     this.f5();
-    this.timer = setInterval(this.f5, 1000);
+    if(process.env.NODE_ENV === "production"){
+      this.timer = setInterval(this.f5, 1000);
+    }
   },
   destroyed() {
     clearInterval(this.timer);

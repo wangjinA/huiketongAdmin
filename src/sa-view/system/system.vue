@@ -28,6 +28,19 @@
             >确定</el-button
           >
         </el-form-item>
+        <el-form-item label="成交订单增加积分百分比：">
+          <el-input
+            v-model="chengjiao.value"
+            placeholder="请输入百分比"
+          ></el-input>
+          <span style="margin-left: 10px">%</span>
+          <el-button
+            style="margin-left: 10px"
+            type="primary"
+            @click="updateChengjiao"
+            >确定</el-button
+          >
+        </el-form-item>
       </el-form>
     </div>
   </div>
@@ -40,6 +53,7 @@ export default {
     return {
       integral: {},
       fenxiao: {},
+      chengjiao: {}
     };
   },
   methods: {
@@ -76,20 +90,49 @@ export default {
           this.sa.error2("修改失败");
         });
     },
+    // 修改成交
+    updateChengjiao() {
+      if (this.chengjiao.value < 0) {
+        return this.sa.error2("数值不得小于0");
+      } else if (this.chengjiao.value > 100) {
+        return this.sa.error2("数值不得大于100");
+      }
+      this.$post("/system/operateMember", {
+        ...this.chengjiao,
+        value: this.chengjiao.value / 100,
+      })
+        .then(() => {
+          this.sa.ok("修改成功");
+          this.f5();
+        })
+        .catch(() => {
+          this.sa.error2("修改失败");
+        });
+    },
     f5() {
       this.$get("/system/selectSetUpByType", {
         params: {
-          type: 1, // 1.签到，2.提成
+          type: 1, // 1.签到，2.提成 3.会员成交获取提成
         },
       }).then((res) => {
         this.integral = res.data.data;
       });
       this.$get("/system/selectSetUpByType", {
         params: {
-          type: 2, // 1.签到，2.提成
+          type: 2, // 1.签到，2.提成 3.会员成交获取提成
         },
       }).then((res) => {
         this.fenxiao = {
+          ...res.data.data,
+          value: res.data.data.value * 100,
+        };
+      });
+      this.$get("/system/selectSetUpByType", {
+        params: {
+          type: 3, // 1.签到，2.提成 3.会员成交获取提成
+        },
+      }).then((res) => {
+        this.chengjiao = {
           ...res.data.data,
           value: res.data.data.value * 100,
         };
