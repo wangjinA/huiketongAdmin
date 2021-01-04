@@ -117,7 +117,13 @@
             <el-button class="c-btn" type="primary" @click="get(s.row)"
               >员工管理</el-button
             >
-            <el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button>
+            <el-button
+              class="c-btn"
+              type="danger"
+              icon="el-icon-delete"
+              @click="del(s.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -135,33 +141,47 @@
         ></el-pagination>
       </div>
     </div>
-    <el-dialog append-to-body :title="`${currentRow.hotelName} 员工管理`" :visible.sync="dialogTableVisible">
+    <el-dialog
+      append-to-body
+      :title="`${currentRow.hotelName} 员工管理`"
+      :visible.sync="dialogTableVisible"
+    >
       <el-table :data="ygList">
-        <el-table-column
-          property="name"
-          label="微信昵称"
-        ></el-table-column>
-        <el-table-column
-          property="contacts"
-          label="姓名"
-        ></el-table-column>
-        <el-table-column
-          property="phone"
-          label="联系电话"
-        ></el-table-column>
-        <el-table-column
-          property="finitude"
-          label="邮箱"
-        ></el-table-column>
-        <el-table-column
-          property="position"
-          label="职位"
-        ></el-table-column>
+        <el-table-column property="name" label="微信昵称"></el-table-column>
+        <el-table-column property="contacts" label="姓名"></el-table-column>
+        <el-table-column property="phone" label="联系电话"></el-table-column>
+        <el-table-column property="finitude" label="邮箱"></el-table-column>
+        <el-table-column property="position" label="职位"></el-table-column>
+        <el-table-column prop="sysRoles" label="权限">
+          <template slot-scope="{ row }">
+            {{ row.sysRoles.map((item) => item.roleName).toString() || "无" }}
+          </template>
+        </el-table-column>
         <el-table-column prop="address" label="操作" width="250px">
-          <template slot-scope="s">
-						<el-button class="c-btn" type="info"  icon="el-icon-view" @click="getMp(s.row)">名片信息</el-button>
-            <!-- <el-button class="c-btn" type="success" icon="el-icon-check" @click="shenhe(s.row, 2)">同意</el-button> -->
-            <el-button class="c-btn" type="danger" icon="el-icon-close" @click="remove(s.row)">删除员工</el-button>
+          <template slot-scope="{row}">
+            <el-select v-model="row.role_vue" placeholder="请选择" size="mini" style="margin-bottom: 5px;" @change="orleChange($event, row)">
+              <el-option
+                v-for="item in roleList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <el-button
+              class="c-btn"
+              type="primary"
+              icon="el-icon-view"
+              @click="getMp(s.row)"
+              >名片信息</el-button
+            >
+            <el-button
+              class="c-btn"
+              type="danger"
+              icon="el-icon-close"
+              @click="remove(s.row)"
+              >删除员工</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -193,10 +213,34 @@ export default {
       dataList: [],
       dialogTableVisible: false,
       ygList: [],
-      currentRow: {}
+      currentRow: {},
+      roleList: [
+        {
+          value: 1,
+          label: "超级管理员",
+        },
+        {
+          value: 2,
+          label: "会议管理员",
+        },
+        {
+          value: 3,
+          label: "婚宴管理员",
+        },
+      ],
+      role: 0
     };
   },
   methods: {
+    orleChange(roleId, row) {
+      this.$post('/api/user/operateUserHostRole', {
+        roleId,
+        userIds: [row.id]
+      }).then(res=>{
+        console.log(res);
+        this.sa.ok("设置成功");
+      })
+    },
     setRebate(data) {
       if (data.rebate < 0) {
         return this.sa.error2("签约比例需要>0");
@@ -269,58 +313,63 @@ export default {
     del: function (data) {
       console.log(data);
       console.log(data.id);
-      this.sa.confirm(`是否确认删除该酒店(${data.hotelName})` , () => {
-        this.$get('/hotel/deleteHotel', {
+      this.sa.confirm(`是否确认删除该酒店(${data.hotelName})`, () => {
+        this.$get("/hotel/deleteHotel", {
           params: {
-            hotelId: data.id
-          }
-        }).then(()=>{
+            hotelId: data.id,
+          },
+        }).then(() => {
           this.sa.ok("删除成功");
-          this.f5()
-        })
-      })
+          this.f5();
+        });
+      });
     },
     remove(data) {
       console.log(data);
       console.log(data.id);
-      
-      this.sa.confirm(`是否确认删除该员工(${data.contacts || data.name})`, () => {
-        this.$get('/api/user/deleteSysUserByUserId', {
-          params: {
-            userId: data.id
-          }
-        }).then(()=>{
-          this.sa.ok("删除成功");
-          this.get(this.currentRow)
-        })
-      })
+
+      this.sa.confirm(
+        `是否确认删除该员工(${data.contacts || data.name})`,
+        () => {
+          this.$get("/api/user/deleteSysUserByUserId", {
+            params: {
+              userId: data.id,
+            },
+          }).then(() => {
+            this.sa.ok("删除成功");
+            this.get(this.currentRow);
+          });
+        }
+      );
     },
     // 名片
-    getMp(data){
-			console.log(data.name);
-      let imgStr = ''
-      if(data.callingCard){
-        let imgList = JSON.stringify(JSON.parse(data.callingCard).map(item=>item.url))
+    getMp(data) {
+      console.log(data.name);
+      let imgStr = "";
+      if (data.callingCard) {
+        let imgList = JSON.stringify(
+          JSON.parse(data.callingCard).map((item) => item.url)
+        );
         JSON.parse(data.callingCard).forEach((item, index) => {
           imgStr += `
             <p>
               <img style="width: 200px;height:100px;object-fit:cover;" 
               src="${item.url}" onclick='showImageList(${imgList}, ${index})'/>
-            </p>`
-        })
+            </p>`;
+        });
       }
       var str = `
           <div>
 						<p>名片：</p>
-						${imgStr || '无'}
+						${imgStr || "无"}
           </div>
         `;
       this.sa.alert(str);
     },
     // 查看酒店员工
     get: function (data) {
-      this.currentRow = data
-      this.dialogTableVisible = true
+      this.currentRow = data;
+      this.dialogTableVisible = true;
       // var str = `
       //     <div>
       //       <p>酒店员工：<span class="ygLength">0</span>人</p>
@@ -335,7 +384,10 @@ export default {
       }).then((res) => {
         this.$nextTick(() => {
           console.log(res);
-          this.ygList = res.data.data.list
+          this.ygList = res.data.data.list.map(item => ({
+            ...item,
+            role_vue: item.sysRoles.length ? item.sysRoles[0].id : ''
+          }));
           // let ygList = document.querySelector('.ygList')
           // let ygLength = document.querySelector('.ygLength')
           // let list = res.data.data.list

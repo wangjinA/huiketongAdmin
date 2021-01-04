@@ -65,12 +65,21 @@
           padding: 1em;
           border-left: 5px #2d8cf0 solid;
           background-color: #eee;
+          display: flex;
+          align-items: center;
         "
       >
-        <big><big>欢迎来到会客通后台管理系统 </big></big>
+        <big>欢迎来到会客通后台管理系统 </big>
         <span style="display: inline-block; margin-left: 1em; color: #888">
           —— 解决客户需求，对接优质酒店</span
         >
+        <span style="margin-left: auto;">统计数据定时刷新：</span>
+        <el-switch
+          v-model="value"
+          active-color="#13ce66"
+          inactive-color="#ff4949">
+        </el-switch>
+        <span style="margin-left: 10px;">{{value ? '开启' : '关闭'}}</span>
       </div>
     </div>
     <div class="total-list">
@@ -156,10 +165,14 @@ export default {
         },
         // http://www.jiouai.com/permission/index/index
       ],
+      value: true
     };
   },
   methods: {
     f5() {
+      if(window.close_f5 || !this.value){
+        return;
+      }
       // 用户
       this.$post("/api/user/getUserDataList", {
         current: 1,
